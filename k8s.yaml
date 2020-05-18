@@ -1,0 +1,30 @@
+---
+apiVersion: apps.kruise.io/v1alpha1
+kind: SidecarSet
+metadata:
+  name: vault-agent-sidecarset
+spec:
+  selector:
+    matchLabels:
+      vault-agent.dstream.cloud/inject: 'true'
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 2
+  containers:
+  - name: vault-agent
+    image: dstreamcloud/vault-agent-sidecar:latest
+    imagePullPolicy: "Always"
+    args:
+    - -annotations=/etc/podinfo/annotations
+    volumeMounts:
+    - name: podinfo
+      mountPath: /etc/podinfo
+  volumes:
+  - name: vault-agent
+    emptyDir: {}
+  - name: podinfo
+    downwardAPI:
+      items:
+        - path: annotations
+          fieldRef:
+            fieldPath: metadata.annotations
