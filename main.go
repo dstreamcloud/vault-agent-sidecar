@@ -60,9 +60,14 @@ func main() {
 		config.WriteString("  }\n")
 	}
 
+	fileSinkTokenPath := "/tmp/token"
+	if tokenPath := annotations["sink.vault-agent.dstream.cloud/token-path"]; tokenPath != "" {
+		fileSinkTokenPath = tokenPath
+	}
+
 	config.WriteString("  sink \"file\" {\n")
 	config.WriteString("    config =  {\n")
-	config.WriteString("      path = \"/tmp/token\"\n")
+	config.WriteString(fmt.Sprintf("      path = \"%s\"\n", fileSinkTokenPath))
 	config.WriteString("    }\n")
 	config.WriteString("  }\n")
 	config.WriteString("}\n\n")
