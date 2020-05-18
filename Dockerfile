@@ -7,4 +7,4 @@ RUN go build -o bootstrap main.go
 FROM vault:1.4.0
 COPY --from=build /workspace/bootstrap bootstrap
 ADD start.sh start.sh
-ENTRYPOINT ["start.sh"]
+ENTRYPOINT ["/workspace/start.sh"]
