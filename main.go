@@ -12,6 +12,7 @@ import (
 
 var (
 	pAnnotations = flag.String("annotations", "", "annotations file path")
+	pVault       = flag.String("vault", "", "vault addr")
 )
 
 func main() {
@@ -36,6 +37,12 @@ func main() {
 	}
 
 	vaultAddr := annotations["vault-agent.dstream.cloud/vault"]
+	if vaultAddr == "" {
+		vaultAddr = *pVault
+	}
+	if vaultAddr == "" {
+		vaultAddr = os.Getenv("VAULT_ADDR")
+	}
 	config.WriteString("vault {\n")
 	config.WriteString(fmt.Sprintf("  address =\"%s\"\n", vaultAddr))
 	config.WriteString("}\n\n")
